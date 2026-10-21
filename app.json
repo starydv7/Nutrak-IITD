@@ -21,7 +21,7 @@
     },
     "web": {
       "output": "server",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/nutrak-child.png"
     },
     "plugins": [
       "expo-router",

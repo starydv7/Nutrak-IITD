@@ -21,25 +21,33 @@ const COLORS = {
 };
 
 export default function LandingPage() {
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const compact = width < 380;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
-      <StatusBar style="dark" />
+      <StatusBar style="dark" backgroundColor={COLORS.background} />
 
       <ScrollView
         style={styles.container}
         contentContainerStyle={[
           styles.content,
-          { minHeight: height - 50 },
+          { minHeight: Math.max(height - 48, 540) },
         ]}
         showsVerticalScrollIndicator={false}
         bounces={false}
       >
-        <View style={styles.backgroundGlow} />
-        <View style={styles.bottomGlow} />
+        {/* Background decorations */}
+        <View
+          pointerEvents="none"
+          style={styles.backgroundGlow}
+        />
+        <View
+          pointerEvents="none"
+          style={styles.bottomGlow}
+        />
 
-        {/* Nutrak logo */}
+        {/* Nutrak brand */}
         <View style={styles.brand}>
           <View style={styles.logo}>
             <View style={styles.logoStem} />
@@ -49,6 +57,7 @@ export default function LandingPage() {
           </View>
 
           <Text style={styles.brandName}>Nutrak</Text>
+
           <Text style={styles.tagline}>
             Better Food • Healthier You
           </Text>
@@ -58,21 +67,28 @@ export default function LandingPage() {
         <View style={styles.hero}>
           <LinearGradient
             colors={["#F5F9EA", "#E8F6DF", "#DDF1D5"]}
-            style={StyleSheet.absoluteFill}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
+            style={StyleSheet.absoluteFillObject}
           />
 
           <View style={styles.heroBlobOne} />
           <View style={styles.heroBlobTwo} />
 
-          <View style={styles.leftPlant}>
+          {/* Decorative plants */}
+          <View
+            pointerEvents="none"
+            style={styles.leftPlant}
+          >
             <View style={[styles.leaf, styles.leaf1]} />
             <View style={[styles.leaf, styles.leaf2]} />
             <View style={[styles.leaf, styles.leaf3]} />
           </View>
 
-          <View style={styles.rightPlant}>
+          <View
+            pointerEvents="none"
+            style={styles.rightPlant}
+          >
             <View style={[styles.leaf, styles.leaf4]} />
             <View style={[styles.leaf, styles.leaf5]} />
             <View style={[styles.leaf, styles.leaf6]} />
@@ -88,19 +104,31 @@ export default function LandingPage() {
           />
         </View>
 
-        {/* Supporting message */}
+        {/* Welcome message */}
         <View style={styles.message}>
-          <Text style={styles.messageText}>
+          <Text
+            style={[
+              styles.messageText,
+              compact && styles.compactMessage,
+            ]}
+          >
             Personalized nutrition for your child’s
           </Text>
-          <Text style={styles.messageText}>
+
+          <Text
+            style={[
+              styles.messageText,
+              compact && styles.compactMessage,
+            ]}
+          >
             brighter and healthier tomorrow
           </Text>
         </View>
 
-        {/* Get Started button */}
+        {/* Get Started */}
         <Pressable
           accessibilityRole="button"
+          accessibilityLabel="Get Started with child nutrition onboarding"
           onPress={() => router.push("/onboarding/gender")}
           style={({ pressed }) => [
             styles.buttonWrapper,
@@ -117,6 +145,10 @@ export default function LandingPage() {
             <Text style={styles.arrow}>→</Text>
           </LinearGradient>
         </Pressable>
+
+        <Text style={styles.footer}>
+          A healthier future starts here
+        </Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -127,19 +159,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
+
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
+
   content: {
     flexGrow: 1,
-    paddingHorizontal: 18,
-    paddingTop: 12,
-    paddingBottom: 14,
+    paddingHorizontal: 22,
+    paddingTop: 22,
+    paddingBottom: 16,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
   },
+
   backgroundGlow: {
     position: "absolute",
     top: 70,
@@ -149,9 +184,10 @@ const styles = StyleSheet.create({
     borderRadius: 125,
     backgroundColor: "#F0F5E7",
   },
+
   bottomGlow: {
     position: "absolute",
-    bottom: -110,
+    bottom: -100,
     left: -80,
     width: 280,
     height: 240,
@@ -159,100 +195,109 @@ const styles = StyleSheet.create({
     backgroundColor: "#E5F4DB",
   },
 
-  /* Brand */
+  /* Logo */
   brand: {
     alignItems: "center",
-    marginBottom: 14,
+    marginBottom: 18,
     zIndex: 2,
   },
+
   logo: {
-    height: 58,
-    width: 66,
+    height: 72,
+    width: 78,
     position: "relative",
-    marginBottom: 2,
+    marginBottom: 4,
   },
+
   logoStem: {
     position: "absolute",
-    left: 32,
+    left: 37,
     bottom: 0,
     width: 3,
-    height: 28,
+    height: 34,
     backgroundColor: COLORS.darkGreen,
     borderRadius: 2,
   },
+
   logoLeafLeft: {
     position: "absolute",
-    left: 5,
-    top: 10,
-    width: 29,
-    height: 41,
+    left: 7,
+    top: 13,
+    width: 31,
+    height: 47,
     backgroundColor: "#38B957",
     borderTopLeftRadius: 2,
-    borderTopRightRadius: 28,
-    borderBottomLeftRadius: 27,
+    borderTopRightRadius: 30,
+    borderBottomLeftRadius: 30,
     borderBottomRightRadius: 2,
     transform: [{ rotate: "-27deg" }],
   },
+
   logoLeafRight: {
     position: "absolute",
-    right: 4,
-    top: 10,
-    width: 28,
-    height: 40,
+    right: 5,
+    top: 13,
+    width: 30,
+    height: 46,
     backgroundColor: COLORS.darkGreen,
-    borderTopLeftRadius: 28,
+    borderTopLeftRadius: 30,
     borderTopRightRadius: 2,
     borderBottomLeftRadius: 2,
-    borderBottomRightRadius: 27,
+    borderBottomRightRadius: 30,
     transform: [{ rotate: "24deg" }],
   },
+
   logoDot: {
     position: "absolute",
     top: 0,
-    left: 24,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    left: 29,
+    width: 19,
+    height: 19,
+    borderRadius: 10,
     backgroundColor: COLORS.darkGreen,
   },
+
   brandName: {
-    fontSize: 38,
-    lineHeight: 43,
+    fontSize: 42,
+    lineHeight: 48,
     fontWeight: "900",
     letterSpacing: -1.5,
     color: COLORS.darkGreen,
   },
+
   tagline: {
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: "600",
     color: COLORS.darkGreen,
-    marginTop: 1,
+    marginTop: 2,
   },
 
-  /* Hero */
+  /* Hero illustration */
   hero: {
     width: "100%",
-    aspectRatio: 0.92,
-    maxHeight: 430,
-    minHeight: 245,
-    borderRadius: 25,
+    aspectRatio: 0.9,
+    maxHeight: 440,
+    minHeight: 240,
+    borderRadius: 28,
     overflow: "hidden",
     position: "relative",
     alignItems: "center",
     justifyContent: "flex-end",
   },
+
   heroBlobOne: {
     position: "absolute",
     top: -15,
-    right: -45,
-    width: "95%",
-    height: "67%",
-    borderRadius: 150,
+    right: -35,
+    width: "90%",
+    height: "70%",
+    borderRadius: 180,
     backgroundColor: "#F7FAED",
   },
+
   heroBlobTwo: {
     position: "absolute",
-    bottom: 15,
+    bottom: 12,
     left: -35,
     width: "80%",
     height: "45%",
@@ -260,8 +305,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#D0EDC5",
     opacity: 0.75,
   },
+
   child: {
-    width: "112%",
+    width: "108%",
     height: "100%",
     zIndex: 2,
   },
@@ -275,6 +321,7 @@ const styles = StyleSheet.create({
     width: 75,
     zIndex: 1,
   },
+
   rightPlant: {
     position: "absolute",
     right: 0,
@@ -283,6 +330,7 @@ const styles = StyleSheet.create({
     width: 75,
     zIndex: 1,
   },
+
   leaf: {
     position: "absolute",
     width: 23,
@@ -293,40 +341,47 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 3,
     backgroundColor: "#72C95C",
   },
+
   leaf1: {
     left: 8,
     bottom: 10,
     transform: [{ rotate: "-45deg" }],
   },
+
   leaf2: {
     left: 38,
     bottom: 46,
     backgroundColor: "#39AC4D",
     transform: [{ rotate: "35deg" }],
   },
+
   leaf3: {
     left: 3,
     bottom: 80,
     backgroundColor: "#A7DF8D",
     transform: [{ rotate: "-25deg" }, { scale: 0.8 }],
   },
+
   leaf4: {
     right: 7,
     bottom: 10,
     transform: [{ rotate: "45deg" }],
   },
+
   leaf5: {
     right: 36,
     bottom: 48,
     backgroundColor: "#39AC4D",
     transform: [{ rotate: "-35deg" }],
   },
+
   leaf6: {
     right: 2,
     bottom: 83,
     backgroundColor: "#A7DF8D",
     transform: [{ rotate: "25deg" }, { scale: 0.8 }],
   },
+
   heart: {
     position: "absolute",
     top: "10%",
@@ -337,53 +392,70 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "-12deg" }],
   },
 
-  /* Supporting message */
+  /* Welcome message */
   message: {
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 16,
+    marginTop: 14,
+    marginBottom: 18,
     paddingHorizontal: 2,
   },
+
   messageText: {
     color: COLORS.textGreen,
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: 13,
+    lineHeight: 20,
     textAlign: "center",
     fontWeight: "500",
+  },
+
+  compactMessage: {
+    fontSize: 12,
+    lineHeight: 18,
   },
 
   /* Button */
   buttonWrapper: {
     width: "100%",
-    borderRadius: 22,
+    borderRadius: 28,
     overflow: "hidden",
     elevation: 3,
-    shadowColor: "#15964B",
+    shadowColor: COLORS.green,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.18,
     shadowRadius: 7,
   },
+
   buttonPressed: {
     opacity: 0.85,
     transform: [{ scale: 0.99 }],
   },
+
   button: {
     width: "100%",
-    minHeight: 51,
-    borderRadius: 22,
+    minHeight: 54,
+    borderRadius: 28,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 12,
   },
+
   buttonText: {
     color: "#FFFFFF",
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "800",
   },
+
   arrow: {
     color: "#FFFFFF",
-    fontSize: 22,
-    lineHeight: 25,
+    fontSize: 24,
+    lineHeight: 28,
+  },
+
+  footer: {
+    color: "#64806A",
+    fontSize: 11,
+    marginTop: 12,
+    textAlign: "center",
   },
 });

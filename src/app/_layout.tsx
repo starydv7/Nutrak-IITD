@@ -6,8 +6,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }} />
+      <StatusBar style="dark" backgroundColor="#FAF9F1" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "#FAF9F1",
+          },
+        }}
+      />
     </SafeAreaProvider>
   );
 }
