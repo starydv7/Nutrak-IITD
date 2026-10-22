@@ -1,6 +1,6 @@
 
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   Image,
@@ -13,20 +13,25 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const COLORS = {
-  background: "#FAF9F1",
-  darkGreen: "#075333",
-  green: "#15964B",
-  textGreen: "#315E43",
-};
+import { COLORS } from "@/constants/nutrak";
+import { resumeRoute } from "@/lib/onboarding-flow";
+import { useOnboarding } from "@/store/onboarding";
 
 export default function LandingPage() {
   const { width, height } = useWindowDimensions();
   const compact = width < 380;
+  const { child, isLoggedIn, isOnboarded } = useOnboarding();
+
+  if (isOnboarded) {
+    return <Redirect href="/dashboard" />;
+  }
+
+  const getStarted = () =>
+    router.push(isLoggedIn ? resumeRoute(child, false) : "/auth/consent");
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
-      <StatusBar style="dark" backgroundColor={COLORS.background} />
+      <StatusBar style="dark" />
 
       <ScrollView
         style={styles.container}
@@ -69,7 +74,7 @@ export default function LandingPage() {
             colors={["#F5F9EA", "#E8F6DF", "#DDF1D5"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
 
           <View style={styles.heroBlobOne} />
@@ -129,7 +134,7 @@ export default function LandingPage() {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Get Started with child nutrition onboarding"
-          onPress={() => router.push("/onboarding/gender")}
+          onPress={getStarted}
           style={({ pressed }) => [
             styles.buttonWrapper,
             pressed && styles.buttonPressed,
@@ -141,7 +146,9 @@ export default function LandingPage() {
             end={{ x: 1, y: 0 }}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Get Started</Text>
+            <Text style={styles.buttonText}>
+              {isLoggedIn ? "Continue Setup" : "Get Started"}
+            </Text>
             <Text style={styles.arrow}>→</Text>
           </LinearGradient>
         </Pressable>
